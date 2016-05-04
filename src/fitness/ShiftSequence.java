@@ -25,6 +25,20 @@ public class ShiftSequence {
 		return this.preferenceValue;
 	}
 
+	//	public int getRating(Shift[] array) {
+	//		if (this.shifts.size() != array.length) {
+	//			throw new RuntimeException("Unable to compare with different sizes");
+	//		}
+	//		for (int i = 0; i < this.shifts.size(); i++) {
+	//			int rate = 0;
+	//			if (this.shifts.get(i) != array[i]) {
+	//				rate += (array[i].ordinal() * Shift.values().length) ^ (array.length - i);
+	//				return false;
+	//			}
+	//		}
+	//		return true;
+	//	}
+
 	public boolean equivalent(Shift[] array) {
 		if (this.shifts.size() != array.length) {
 			return false;
@@ -35,6 +49,14 @@ public class ShiftSequence {
 			}
 		}
 		return true;
+	}
+
+	public int length() {
+		return this.shifts.size();
+	}
+
+	public List<Shift> getShifts() {
+		return this.shifts;
 	}
 
 	@Override

@@ -4,7 +4,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 import ga.Constants.Shift;
 
@@ -41,6 +44,22 @@ public class ShiftSequencePreferencesEvaluator {
 			}
 		}
 		return 100;
+	}
+	public ShiftSequence random(int size) {
+		final Map<Integer, List<ShiftSequence>> map = new HashMap<>();
+		for (final ShiftSequence sequence : this.sequences) {
+			List<ShiftSequence> list = map.get(sequence.length());
+			if (list == null) {
+				list = new ArrayList<>();
+				map.put(sequence.length(), list);
+			}
+			list.add(sequence);
+		}
+		final List<ShiftSequence> list = map.get(size);
+		if (list == null) {
+			throw new RuntimeException("No shift sequence for size: " + size);
+		}
+		return list.get(new Random().nextInt(list.size()));
 	}
 
 	@Override

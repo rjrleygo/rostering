@@ -19,11 +19,16 @@ public class Staff {
 	private final Employee[] employees;
 
 	private Staff() {
-		this.employees = new Employee[1];
-		final Employee employee = new Employee("Employee1", 1);
-		employee.setShift(5, Shift.DO);
-		employee.setShift(6, Shift.DO);
-		this.employees[0] = employee;
+		this.employees = new Employee[3];
+		this.employees[0] = new Employee("Employee1", 1);
+		this.employees[0].setShift(5, Shift.DO);
+		this.employees[0].setShift(6, Shift.DO);
+		this.employees[1] = new Employee("Employee2", 1);
+		this.employees[1].setShift(5, Shift.DO);
+		this.employees[1].setShift(6, Shift.DO);
+		this.employees[2] = new Employee("Employee2", 1);
+		this.employees[2].setShift(5, Shift.SD);
+		this.employees[2].setShift(6, Shift.DO);
 	}
 
 	public Shift[] getShiftGuide() {

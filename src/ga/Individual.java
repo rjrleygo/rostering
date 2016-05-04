@@ -4,17 +4,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 import employee.Staff;
+import fitness.ShiftSequencePreferencesEvaluator;
 import ga.Constants.Shift;
 
 public class Individual {
 	public static class Factory {
+		//		public static Individual generate(Shift[] guide) {
+		//			final List<Shift> list = new ArrayList<>();
+		//			// build genes of individual based on the guide
+		//			for (int i = 0; i < guide.length; i++) {
+		//				if (Shift.UNKNOWN.equals(guide[i])) {
+		//					list.add(Shift.random());
+		//				} else {
+		//					list.add(guide[i]);
+		//				}
+		//			}
+		//
+		//			final Individual individual = new Individual(guide.length);
+		//			list.toArray(individual.shifts);
+		//			return individual;
+		//		}
 		public static Individual generate(Shift[] guide) {
 			final List<Shift> list = new ArrayList<>();
+			int counter = 0;
 			// build genes of individual based on the guide
 			for (int i = 0; i < guide.length; i++) {
 				if (Shift.UNKNOWN.equals(guide[i])) {
-					list.add(Shift.random());
+					counter++;
 				} else {
+					if (counter > 0) {
+						list.addAll(ShiftSequencePreferencesEvaluator.getInstance().random(counter).getShifts());
+						counter = 0;
+					}
 					list.add(guide[i]);
 				}
 			}
