@@ -3,8 +3,8 @@ package ga;
 import java.util.Random;
 
 public class Constants {
-	public static final int DEFAULT_POPULATION_SIZE = 10;
-	public static final int DEFAULT_TOURNAMENT_SIZE = 5;
+	public static final int DEFAULT_POPULATION_SIZE = 3;
+	public static final int DEFAULT_TOURNAMENT_SIZE = 2;
 
 	public static final double DEFAULT_UNIFORM_RATE = 0.5;
 	public static final double DEFAULT_MUTATION_RATE = 0.015;

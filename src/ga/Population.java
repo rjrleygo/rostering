@@ -69,7 +69,7 @@ public class Population {
 
 		// Mutate population
 		for (int i = elitismOffset; i < newPopulation.size(); i++) {
-			newPopulation.getIndividual(i).mutate();
+			newPopulation.getIndividual(i).mutate(this.staff.getShiftGuide());
 		}
 
 		return newPopulation;

@@ -34,10 +34,15 @@ public class Individual {
 				} else {
 					if (counter > 0) {
 						list.addAll(ShiftSequencePreferencesEvaluator.getInstance().random(counter).getShifts());
-						counter = 0;
 					}
+					counter = 0;
 					list.add(guide[i]);
 				}
+			}
+			// in case last element in guide is NOT a hard condition (UNKNOWN)
+			if (counter > 0) {
+				list.addAll(ShiftSequencePreferencesEvaluator.getInstance().random(counter).getShifts());
+				//counter = 0;
 			}
 
 			final Individual individual = new Individual(guide.length);
@@ -79,6 +84,45 @@ public class Individual {
 			this.fitness = fitnessFunction.getFitness(this.getShifts());
 		}
 		return this.fitness;
+	}
+
+	// mutate based on guide
+	public void mutate(Shift[] guide) {
+
+		final List<Shift> list = new ArrayList<>();
+		List<Shift> temp = null;
+		for (int i = 0; i < guide.length; i++) {
+			if (Shift.UNKNOWN.equals(guide[i])) {
+				// guide is unknown, store current shift in temp
+				if (temp == null) {
+					temp = new ArrayList<>();
+				}
+				temp.add(this.shifts[i]);
+			} else {
+				// guide is a hard condition
+				// if temp is NOT null, then element was preceded by UNKNOWNs
+				// therefore, either store temp or mutate, depending on mutation rate
+				if (temp != null) {
+					if (Math.random() <= Constants.DEFAULT_MUTATION_RATE) {
+						list.addAll(ShiftSequencePreferencesEvaluator.getInstance().random(temp.size()).getShifts());
+					} else {
+						list.addAll(temp);
+					}
+				}
+				temp = null;
+				list.add(guide[i]);
+			}
+		}
+		// in case last element in guide is NOT a hard condition
+		if (temp != null) {
+			if (Math.random() <= Constants.DEFAULT_MUTATION_RATE) {
+				list.addAll(ShiftSequencePreferencesEvaluator.getInstance().random(temp.size()).getShifts());
+			} else {
+				list.addAll(temp);
+			}
+		}
+
+		list.toArray(this.shifts);
 	}
 
 	public void mutate() {
