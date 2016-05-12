@@ -88,7 +88,7 @@ public class FitnessFunction {
 
 	// Get acceptable fitness
 	public int getAcceptableFitness() {
-		return 0;
+		return 7 * 14;
 	}
 
 	public static void main(String[] args) {

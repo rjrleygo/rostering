@@ -1,5 +1,8 @@
 package ga;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import employee.Staff;
 import ga.Constants.Shift;
 
@@ -69,26 +72,71 @@ public class Population {
 
 		// Mutate population
 		for (int i = elitismOffset; i < newPopulation.size(); i++) {
-			newPopulation.getIndividual(i).mutate(this.staff.getShiftGuide());
+			newPopulation.getIndividual(i).mutate(this.shiftGuide);
 		}
 
 		return newPopulation;
 	}
 
 	// Crossover individuals
-	protected Individual crossover(Individual individual1, Individual individual2) {
+	public Individual crossover(Individual individual1, Individual individual2) {
 		final Individual newIndividual = Individual.Factory.generate(this.shiftGuide);
-		// Loop through genes
-		for (int i = 0; i < individual1.size(); i++) {
-			// Crossover
-			if (Math.random() <= Constants.DEFAULT_UNIFORM_RATE) {
-				newIndividual.setShift(i, individual1.getShift(i));
+
+		final List<Shift> list = new ArrayList<>();
+		List<Shift> temp1 = null;
+		List<Shift> temp2 = null;
+		for (int i = 0; i < this.shiftGuide.length; i++) {
+			if (Shift.UNKNOWN.equals(this.shiftGuide[i])) {
+				// guide is unknown, store current shift in temp
+				if ((temp1 == null) && (temp2 == null)) {
+					temp1 = new ArrayList<>();
+					temp2 = new ArrayList<>();
+				}
+				temp1.add(individual1.getShift(i));
+				temp2.add(individual2.getShift(i));
 			} else {
-				newIndividual.setShift(i, individual2.getShift(i));
+				// guide is a hard condition
+				// if temp is NOT null, then element was preceded by UNKNOWNs
+				// therefore, either store temp or mutate, depending on mutation rate
+				if ((temp1 != null) && (temp2 != null)) {
+					if (Math.random() <= Constants.DEFAULT_UNIFORM_RATE) {
+						list.addAll(temp1);
+					} else {
+						list.addAll(temp2);
+					}
+				}
+				temp1 = null;
+				temp2 = null;
+				list.add(this.shiftGuide[i]);
 			}
 		}
+		// in case last element in guide is NOT a hard condition
+		if ((temp1 != null) && (temp2 != null)) {
+			if (Math.random() <= Constants.DEFAULT_UNIFORM_RATE) {
+				list.addAll(temp1);
+			} else {
+				list.addAll(temp2);
+			}
+		}
+
+		list.toArray(newIndividual.getShifts());
 		return newIndividual;
 	}
+
+	// Crossover individuals
+	//	protected Individual crossover(Individual individual1, Individual individual2) {
+	//		final Individual newIndividual = Individual.Factory.generate(this.shiftGuide);
+	//		// Loop through genes
+	//		for (int i = 0; i < individual1.size(); i++) {
+	//			// Crossover
+	//			if (Math.random() <= Constants.DEFAULT_UNIFORM_RATE) {
+	//				newIndividual.setShift(i, individual1.getShift(i));
+	//			} else {
+	//				newIndividual.setShift(i, individual2.getShift(i));
+	//			}
+	//		}
+	//		return newIndividual;
+	//	}
 
 	// Select individuals for crossover
 	protected Individual runTournament() {

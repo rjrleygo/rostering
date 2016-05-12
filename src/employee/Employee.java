@@ -7,6 +7,20 @@ public class Employee {
 	private final double fte;
 	private final Shift[] shifts;
 
+	public Employee(String line) {
+		final String[] array = line.split(",");
+		this.name = array[0];
+		this.fte = Double.valueOf(array[1]);
+		this.shifts = new Shift[array.length - 2];
+		for (int i = 2; i < array.length; i++) {
+			if ((array[i] == null) || "".equals(array[i].trim())) {
+				this.shifts[i - 2] = Shift.UNKNOWN;
+			} else {
+				this.shifts[i - 2] = Shift.valueOf(array[i]);
+			}
+		}
+	}
+
 	public Employee(String name, double fte) {
 		this.name = name;
 		this.fte = fte;

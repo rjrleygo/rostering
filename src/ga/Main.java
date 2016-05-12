@@ -16,7 +16,7 @@ public class Main {
 
 		// Evolve our population until we reach an optimum solution
 		int generationCount = 0;
-		while ((population.getFittest().getFitness() > fitnessFunction.getAcceptableFitness()) && (generationCount <= 10)) {
+		while ((population.getFittest().getFitness() > fitnessFunction.getAcceptableFitness()) && (generationCount <= 100)) {
 			generationCount++;
 			System.out.println("Generation: " + generationCount + " Fittest: " + population.getFittest().getFitness()
 					+ ": " + population.getFittest());
